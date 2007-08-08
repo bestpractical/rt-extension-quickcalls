@@ -1,0 +1,18 @@
+--- 
+abstract: Quickly create tickets in specific queues with default values
+author: Kevin Falcone <falcone@bestpractical.com>
+distribution_type: module
+generated_by: Module::Install version 0.67
+license: perl
+meta-spec: 
+  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+  version: 1.3
+name: RT-Extension-QuickCalls
+no_index: 
+  directory: 
+    - html
+    - inc
+    - t
+requires: 
+  Test::More: 0
+version: 0.01

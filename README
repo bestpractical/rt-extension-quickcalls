@@ -1,0 +1,40 @@
+RT-Extension-QuickCalls 
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+You will need to enable the new QuickCalls portlet with a line
+like this in your RT_SiteConfig.pm file
+
+Set($HomepageComponents, [qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders
+                             RefreshHomepage QuickCalls)]);
+
+This is the default portlet list with QuickCalls added to the end
+People can then choose to add the portlet to their homepage
+in Preferences -> RT at a glance
+
+To set up your Quick Calls, you will want to specify a Name and a Queue
+in the config file.  The Name will become the Subject of the task unless
+you specify a Subject option.  You can add other Ticket options as needed,
+such as Status.
+
+Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
+                 {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
+
+After you have added QuickCalls to your home page, you will be able to select
+one, click Create and be brought to the ticket creation page with multiple
+fields pre-filled
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2007, Best Practical Solutions LLC.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
