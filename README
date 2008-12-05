@@ -8,6 +8,7 @@ To install this module, run the following commands:
     make
     make test
     make install
+    add RT::Extension::QuickCalls to your @Plugins line in RT_SiteConfig.pm
 
 You will need to enable the new QuickCalls portlet with a line
 like this in your RT_SiteConfig.pm file
