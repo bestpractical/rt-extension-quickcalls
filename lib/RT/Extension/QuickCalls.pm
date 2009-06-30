@@ -1,6 +1,6 @@
 package RT::Extension::QuickCalls;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use warnings;
 use strict;
@@ -52,7 +52,7 @@ Kevin Falcone  C<< <falcone@bestpractical.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007, Best Practical Solutions, LLC.  All rights reserved.
+Copyright (c) 2007-2009, Best Practical Solutions, LLC.  All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
