@@ -23,7 +23,8 @@ in Preferences -> RT at a glance
 To set up your Quick Calls, you will want to specify a Name and a Queue
 in the config file.  The Name will become the Subject of the task unless
 you specify a Subject option.  You can add other Ticket options as needed,
-such as Status.
+such as Status.  You can also add SetOwnerToCurrentUser if you want to default 
+the Owner to the current user.
 
 Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
                  {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
@@ -34,7 +35,7 @@ fields pre-filled
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2007-2009, Best Practical Solutions LLC.
+Copyright (C) 2007-2010, Best Practical Solutions LLC.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

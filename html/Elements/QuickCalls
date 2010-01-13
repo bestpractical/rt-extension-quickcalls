@@ -65,6 +65,8 @@ if ($QuickCall) {
     # copy so we don't nuke the config variable
     $QuickCall = { map { $_ => $QuickCall->{$_} } keys %$QuickCall };
     $QuickCall->{Subject} ||= $QuickCall->{Name};
+    $QuickCall->{Owner} = $session{CurrentUser}->Id if ($QuickCall->{SetOwnerToCurrentUser});
+    delete $QuickCall->{SetOwnerToCurrentUser};
     delete $QuickCall->{Name};
     my $query = $m->comp( '/Elements/QueryString', %$QuickCall);
     RT::Interface::Web::Redirect($RT::WebURL."Ticket/Create.html?$query");
