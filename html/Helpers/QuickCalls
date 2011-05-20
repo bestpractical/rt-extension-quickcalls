@@ -45,13 +45,19 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<&| /Widgets/TitleBox, title => loc('Quick Calls') &>
-<form action="<%$RT::WebPath%>/Helpers/QuickCalls">
-<select name="QuickCall">
-% foreach my $QuickCall (@{$RT::QuickCalls||[]}) {
-    <option value="<%$QuickCall->{Name}%>"><%$QuickCall->{Name}%>
-% }
-</select>
-<input type="submit" value="Create">
-</form>
-</&>
+<%init>
+if ($QuickCall) {
+    my ($QuickCall) = grep { $_->{Name} eq $QuickCall} @{$RT::QuickCalls||[]};
+    # copy so we don't nuke the config variable
+    $QuickCall = { map { $_ => $QuickCall->{$_} } keys %$QuickCall };
+    $QuickCall->{Subject} ||= $QuickCall->{Name};
+    $QuickCall->{Owner} = $session{CurrentUser}->Id if ($QuickCall->{SetOwnerToCurrentUser});
+    delete $QuickCall->{SetOwnerToCurrentUser};
+    delete $QuickCall->{Name};
+    my $query = $m->comp( '/Elements/QueryString', %$QuickCall);
+    RT::Interface::Web::Redirect($RT::WebURL."Ticket/Create.html?$query");
+}
+</%init>
+<%args>
+$QuickCall => undef
+</%args>
