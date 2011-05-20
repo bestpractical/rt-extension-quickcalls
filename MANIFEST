@@ -1,5 +1,6 @@
 Changes
 html/Elements/QuickCalls
+html/Helpers/QuickCalls
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -11,8 +12,8 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/RT/Extension/QuickCalls.pm
 Makefile.PL
-MANIFEST
-META.yml			# Will be created by "make dist"
+MANIFEST			This list of files
+META.yml
 README
 t/00.load.t
 t/pod-coverage.t

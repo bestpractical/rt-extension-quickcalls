@@ -1,4 +1,6 @@
-Revision history for RT-Extension-QuickCalls
+0.04
+    Fixes for 3.8.10 and 4.0.0 compatibility
+
 0.03 
     CPANize
 
