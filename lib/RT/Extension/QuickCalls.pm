@@ -47,7 +47,7 @@ L<http://rt.cpan.org>.
 
 =head1 AUTHOR
 
-Kevin Falcone  C<< <falcone@bestpractical.com> >>
+Kevin Falcone
 
 
 =head1 LICENCE AND COPYRIGHT
