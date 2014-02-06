@@ -17,8 +17,8 @@ RT::Extension::QuickCalls - Quickly create tickets in specific queues with defau
 You will need to enable the new QuickCalls portlet with a line
 like this in your RT_SiteConfig.pm file
 
-Set($HomepageComponents, [qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders
-                             RefreshHomepage QuickCalls)]);
+    Set($HomepageComponents, [qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders
+                                 RefreshHomepage QuickCalls)]);
 
 This is the default portlet list with QuickCalls added to the end
 People can then choose to add the portlet to their homepage
@@ -29,12 +29,44 @@ in the config file.  The Name will become the Subject of the task unless
 you specify a Subject option.  You can add other Ticket options as needed,
 such as Status.
 
-Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
-                 {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
+    Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
+                     {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
 
 After you have added QuickCalls to your home page, you will be able to select
 one, click Create and be brought to the ticket creation page with multiple
 fields pre-filled
+
+=head1 INSTALLATION 
+
+=over
+
+=item C<perl Makefile.PL>
+
+=item C<make>
+
+=item C<make install>
+
+May need root permissions
+
+=item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
+
+If you are using RT 4.2 or greater, add this line:
+
+    Plugin('RT::Extension::QuickCalls');
+
+For earlier releases of RT 4, add this line:
+
+    Set(@Plugins, qw(RT::Extension::QuickCalls));
+
+or add C<{{$name}}> to your existing C<@Plugins> line.
+
+=item Clear your mason cache
+
+    rm -rf /opt/rt4/var/mason_data/obj
+
+=item Restart your webserver
+
+=back
 
 =head1 BUGS AND LIMITATIONS
 
@@ -52,7 +84,7 @@ Kevin Falcone
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2009, Best Practical Solutions, LLC.  All rights reserved.
+Copyright (c) 2007-2014, Best Practical Solutions, LLC.  All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
