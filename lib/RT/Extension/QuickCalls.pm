@@ -58,7 +58,7 @@ For earlier releases of RT 4, add this line:
 
     Set(@Plugins, qw(RT::Extension::QuickCalls));
 
-or add C<{{$name}}> to your existing C<@Plugins> line.
+or add C<RT::Extension::QuickCalls> to your existing C<@Plugins> line.
 
 =item Clear your mason cache
 

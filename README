@@ -40,7 +40,7 @@ INSTALLATION
 
             Set(@Plugins, qw(RT::Extension::QuickCalls));
 
-        or add "{{$name}}" to your existing @Plugins line.
+        or add "RT::Extension::QuickCalls" to your existing @Plugins line.
 
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
