@@ -3,11 +3,12 @@ abstract: 'Quickly create tickets in specific queues with default values'
 author:
   - 'Kevin Falcone'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
 distribution_type: module
-generated_by: 'Module::Install version 1.01'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.06'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,9 +18,9 @@ no_index:
   directory:
     - html
     - inc
-    - t
+    - xt
 requires:
   Test::More: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.04
+version: 0.05
