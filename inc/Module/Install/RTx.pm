@@ -8,13 +8,13 @@ no warnings 'once';
 
 use Module::Install::Base;
 use base 'Module::Install::Base';
-our $VERSION = '0.28';
+our $VERSION = '0.32_01';
 
 use FindBin;
 use File::Glob     ();
 use File::Basename ();
 
-my @DIRS = qw(etc lib html bin sbin po var);
+my @DIRS = qw(etc lib html static bin sbin po var);
 my @INDEX_DIRS = qw(lib bin sbin);
 
 sub RTx {
@@ -62,10 +62,11 @@ sub RTx {
     unshift @INC, "$RT::LocalPath/lib" if $RT::LocalPath;
     unshift @INC, $lib_path;
 
-    $RT::LocalVarPath  ||= $RT::VarPath;
-    $RT::LocalPoPath   ||= $RT::LocalLexiconPath;
-    $RT::LocalHtmlPath ||= $RT::MasonComponentRoot;
-    $RT::LocalLibPath  ||= "$RT::LocalPath/lib";
+    $RT::LocalVarPath    ||= $RT::VarPath;
+    $RT::LocalPoPath     ||= $RT::LocalLexiconPath;
+    $RT::LocalHtmlPath   ||= $RT::MasonComponentRoot;
+    $RT::LocalStaticPath ||= $RT::StaticPath;
+    $RT::LocalLibPath    ||= "$RT::LocalPath/lib";
 
     my $with_subdirs = $ENV{WITH_SUBDIRS};
     @ARGV = grep { /WITH_SUBDIRS=(.*)/ ? ( ( $with_subdirs = $1 ), 0 ) : 1 }
@@ -129,23 +130,13 @@ install ::
 
     my %has_etc;
     if ( File::Glob::bsd_glob("$FindBin::Bin/etc/schema.*") ) {
-
-        # got schema, load factory module
         $has_etc{schema}++;
-        $self->load('RTxFactory');
-        $self->postamble(<< ".");
-factory ::
-\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxFactory(qw($RTx $name))"
-
-dropdb ::
-\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxFactory(qw($RTx $name drop))"
-
-.
     }
     if ( File::Glob::bsd_glob("$FindBin::Bin/etc/acl.*") ) {
         $has_etc{acl}++;
     }
     if ( -e 'etc/initialdata' ) { $has_etc{initialdata}++; }
+    if ( -d 'etc/upgrade/' )    { $has_etc{upgrade}++; }
 
     $self->postamble("$postamble\n");
     unless ( $subdirs{'lib'} ) {
@@ -164,68 +155,69 @@ dropdb ::
         print "For first-time installation, type 'make initdb'.\n";
         my $initdb = '';
         $initdb .= <<"." if $has_etc{schema};
-\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(schema))"
+\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(schema \$(NAME) \$(VERSION)))"
 .
         $initdb .= <<"." if $has_etc{acl};
-\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(acl))"
+\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(acl \$(NAME) \$(VERSION)))"
 .
         $initdb .= <<"." if $has_etc{initialdata};
-\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(insert))"
+\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(insert \$(NAME) \$(VERSION)))"
 .
         $self->postamble("initdb ::\n$initdb\n");
         $self->postamble("initialize-database ::\n$initdb\n");
+        if ($has_etc{upgrade}) {
+            print "To upgrade from a previous version of this extension, use 'make upgrade-database'\n";
+            my $upgradedb = qq|\t\$(NOECHO) \$(PERL) -Ilib -I"$local_lib_path" -I"$lib_path" -Minc::Module::Install -e"RTxInitDB(qw(upgrade \$(NAME) \$(VERSION)))"\n|;
+            $self->postamble("upgrade-database ::\n$upgradedb\n");
+            $self->postamble("upgradedb ::\n$upgradedb\n");
+        }
     }
 }
 
-sub RTxInit {
-    unshift @INC, substr( delete( $INC{'RT.pm'} ), 0, -5 ) if $INC{'RT.pm'};
-    require RT;
-    RT::LoadConfig();
-    RT::ConnectToDatabase();
-
-    die "Cannot load RT" unless $RT::Handle and $RT::DatabaseType;
-}
-
-# stolen from RT::Handle so we work on 3.6 (cmp_versions came in with 3.8)
-{ my %word = (
-    a     => -4,
-    alpha => -4,
-    b     => -3,
-    beta  => -3,
-    pre   => -2,
-    rc    => -1,
-    head  => 9999,
-);
-sub cmp_version($$) {
-    my ($a, $b) = (@_);
-    my @a = grep defined, map { /^[0-9]+$/? $_ : /^[a-zA-Z]+$/? $word{$_}|| -10 : undef }
-        split /([^0-9]+)/, $a;
-    my @b = grep defined, map { /^[0-9]+$/? $_ : /^[a-zA-Z]+$/? $word{$_}|| -10 : undef }
-        split /([^0-9]+)/, $b;
-    @a > @b
-        ? push @b, (0) x (@a-@b)
-        : push @a, (0) x (@b-@a);
-    for ( my $i = 0; $i < @a; $i++ ) {
-        return $a[$i] <=> $b[$i] if $a[$i] <=> $b[$i];
-    }
-    return 0;
-}}
 sub requires_rt {
     my ($self,$version) = @_;
 
     # if we're exactly the same version as what we want, silently return
     return if ($version eq $RT::VERSION);
 
-    my @sorted = sort cmp_version $version,$RT::VERSION;
+    _load_rt_handle();
+    my @sorted = sort RT::Handle::cmp_version $version,$RT::VERSION;
 
     if ($sorted[-1] eq $version) {
         # should we die?
-        warn "\nWarning: prerequisite RT $version not found. Your installed version of RT ($RT::VERSION) is too old.\n\n";
+        die "\nWarning: prerequisite RT $version not found. Your installed version of RT ($RT::VERSION) is too old.\n\n";
     }
+}
+
+sub rt_too_new {
+    my ($self,$version,$msg) = @_;
+    $msg ||= "Your version %s is too new, this extension requires a release of RT older than %s";
+
+    _load_rt_handle();
+    my @sorted = sort RT::Handle::cmp_version $version,$RT::VERSION;
+
+    if ($sorted[0] eq $version) {
+        die sprintf($msg,$RT::VERSION,$version);
+    }
+}
+
+# RT::Handle runs FinalizeDatabaseType which calls RT->Config->Get
+# On 3.8, this dies.  On 4.0/4.2 ->Config transparently runs LoadConfig.
+# LoadConfig requires being able to read RT_SiteConfig.pm (root) so we'd
+# like to avoid pushing that on users.
+# Fake up just enough Config to let FinalizeDatabaseType finish, and
+# anyone later calling LoadConfig will overwrite our shenanigans.
+sub _load_rt_handle {
+    unless ($RT::Config) {
+        require RT::Config;
+        $RT::Config = RT::Config->new;
+        RT->Config->Set('DatabaseType','mysql');
+    }
+    require RT::Handle;
 }
 
 1;
 
 __END__
 
-#line 348
+#line 360
