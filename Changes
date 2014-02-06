@@ -1,12 +1,14 @@
+0.05 2014-02-06
+ - Updated for 4.2
 0.04
-    Fixes for 3.8.10 and 4.0.0 compatibility
+ - Fixes for 3.8.10 and 4.0.0 compatibility
 
-0.03 
-    CPANize
+0.03
+ - CPANize
 
 0.02 2008-12-04 Thu 20:12 -0500
-    Update installer for 3.8 compatibility
+ - Update installer for 3.8 compatibility
 
-0.01  Mon Jun 18 14:53:54 2007
-       Initial release.
+0.01 2007-06-18T14:53:54Z
+ - Initial release.
 
