@@ -15,7 +15,7 @@ RT::Extension::QuickCalls - Quickly create tickets in specific queues with defau
 =head1 SYNOPSIS
 
 You will need to enable the new QuickCalls portlet with a line
-like this in your RT_SiteConfig.pm file
+like this in your F<RT_SiteConfig.pm> file:
 
     Set($HomepageComponents, [qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders
                                  RefreshHomepage QuickCalls)]);
@@ -36,9 +36,9 @@ current user.
 
 After you have added QuickCalls to your home page, you will be able to select
 one, click Create and be brought to the ticket creation page with multiple
-fields pre-filled
+fields pre-filled.
 
-=head1 INSTALLATION 
+=head1 INSTALLATION
 
 =over
 
@@ -61,6 +61,9 @@ For earlier releases of RT 4, add this line:
     Set(@Plugins, qw(RT::Extension::QuickCalls));
 
 or add C<RT::Extension::QuickCalls> to your existing C<@Plugins> line.
+
+You will also need to add QuickCalls to the C<$HomepageComponents>
+configuration, as documented above.
 
 =item Clear your mason cache
 
