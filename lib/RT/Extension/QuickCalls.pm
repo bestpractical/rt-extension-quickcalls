@@ -34,6 +34,18 @@ current user.
     Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
                      {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
 
+If a value is an anonymous subref, it will be called when the QuickCall
+is selected, and its return value filled in for the appropriate key:
+
+    Set($QuickCalls,[ {
+       Queue   => 'General',
+       Name    => 'This will have the current time on the server in its content',
+       Content => sub {
+          my $date = localtime;
+          return "When: $date\n\n";
+       },
+    }]);
+
 After you have added QuickCalls to your home page, you will be able to select
 one, click Create and be brought to the ticket creation page with multiple
 fields pre-filled.

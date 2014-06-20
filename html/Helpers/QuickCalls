@@ -54,6 +54,11 @@ if ($QuickCall) {
     $QuickCall->{Owner} = $session{CurrentUser}->Id if ($QuickCall->{SetOwnerToCurrentUser});
     delete $QuickCall->{SetOwnerToCurrentUser};
     delete $QuickCall->{Name};
+
+    # Anon subrefs can be used to generate dynamic values
+    $QuickCall->{$_} = $QuickCall->{$_}->()
+        for grep {ref $QuickCall->{$_} eq "CODE"} keys %{$QuickCall};
+
     my $query = $m->comp( '/Elements/QueryString', %$QuickCall);
     RT::Interface::Web::Redirect($RT::WebURL."Ticket/Create.html?$query");
 }
