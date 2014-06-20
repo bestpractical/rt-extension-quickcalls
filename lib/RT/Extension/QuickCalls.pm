@@ -1,6 +1,6 @@
 package RT::Extension::QuickCalls;
 
-our $VERSION = '0.06';
+our $VERSION = '1.00';
 
 use warnings;
 use strict;

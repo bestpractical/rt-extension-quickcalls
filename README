@@ -4,7 +4,7 @@ NAME
 
 SYNOPSIS
     You will need to enable the new QuickCalls portlet with a line like this
-    in your RT_SiteConfig.pm file
+    in your RT_SiteConfig.pm file:
 
         Set($HomepageComponents, [qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders
                                      RefreshHomepage QuickCalls)]);
@@ -13,17 +13,31 @@ SYNOPSIS
     can then choose to add the portlet to their homepage in Preferences ->
     RT at a glance
 
-    To set up your Quick Calls, you will want to specify a Name and a Queue
-    in the config file. The Name will become the Subject of the task unless
-    you specify a Subject option. You can add other Ticket options as
-    needed, such as Status.
+    To set up your Quick Calls, you will want to specify a "Name" and a
+    "Queue" in the config file. The "Name" will become the "Subject" of the
+    task unless you specify a "Subject" option. You can add other Ticket
+    options as needed, such as "Status". Additionally, if the
+    "SetOwnerToCurrentUser" option is set, the ticket will be owned by the
+    current user.
 
         Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
                          {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
 
+    If a value is an anonymous subref, it will be called when the QuickCall
+    is selected, and its return value filled in for the appropriate key:
+
+        Set($QuickCalls,[ {
+           Queue   => 'General',
+           Name    => 'This will have the current time on the server in its content',
+           Content => sub {
+              my $date = localtime;
+              return "When: $date\n\n";
+           },
+        }]);
+
     After you have added QuickCalls to your home page, you will be able to
     select one, click Create and be brought to the ticket creation page with
-    multiple fields pre-filled
+    multiple fields pre-filled.
 
 INSTALLATION
     "perl Makefile.PL"
@@ -41,6 +55,9 @@ INSTALLATION
             Set(@Plugins, qw(RT::Extension::QuickCalls));
 
         or add "RT::Extension::QuickCalls" to your existing @Plugins line.
+
+        You will also need to add QuickCalls to the $HomepageComponents
+        configuration, as documented above.
 
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
