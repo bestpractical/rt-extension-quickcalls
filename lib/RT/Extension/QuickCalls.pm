@@ -24,10 +24,12 @@ This is the default portlet list with QuickCalls added to the end
 People can then choose to add the portlet to their homepage
 in Preferences -> RT at a glance
 
-To set up your Quick Calls, you will want to specify a Name and a Queue
-in the config file.  The Name will become the Subject of the task unless
-you specify a Subject option.  You can add other Ticket options as needed,
-such as Status.
+To set up your Quick Calls, you will want to specify a C<Name> and a
+C<Queue> in the config file.  The C<Name> will become the C<Subject> of
+the task unless you specify a C<Subject> option.  You can add other
+Ticket options as needed, such as C<Status>.  Additionally, if the
+C<SetOwnerToCurrentUser> option is set, the ticket will be owned by the
+current user.
 
     Set($QuickCalls,[{Name => "Foo", Queue => 'General', Status => 'resolved'},
                      {Name => "Bar", Queue => 'Queue2',  Status => 'resolved'}]);
