@@ -7,5 +7,4 @@ rt_too_new '4.6.0';
 
 test_requires('Test::More');
 
-sign;
 &WriteAll;
