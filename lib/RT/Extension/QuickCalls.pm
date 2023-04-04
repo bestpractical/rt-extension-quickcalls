@@ -50,6 +50,11 @@ After you have added QuickCalls to your home page, you will be able to select
 one, click Create and be brought to the ticket creation page with multiple
 fields pre-filled.
 
+The QuickCalls portlet can also be added to the user summary page:
+
+    Set(@UserSummaryPortlets, (qw/ExtraInfo CreateTicket ActiveTickets
+        InactiveTickets UserAssets QuickCalls/));
+
 =head1 INSTALLATION
 
 =over
