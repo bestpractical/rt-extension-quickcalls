@@ -75,8 +75,23 @@ if ( $QuickCall ) {
         $QuickCall->{$_} = $QuickCall->{$_}->()
             for grep { ref $QuickCall->{$_} eq "CODE" } keys %{$QuickCall};
 
-        my $query = $m->comp( '/Elements/QueryString', %$QuickCall );
-        RT::Interface::Web::Redirect( $RT::WebURL . "Ticket/Create.html?$query" );
+        if ( $QuickCall->{QuickCreate} ) {
+            ProcessQuickCreate(
+                Path => $ARGS{QuickCallsPath},
+                ARGSRef => $QuickCall,
+                $ARGS{PassArguments}
+                ? (
+                    PassArguments => {
+                        map { $_ => $ARGS{$_} } ref $ARGS{PassArguments} eq 'ARRAY' ? @{ $ARGS{PassArguments} } : $ARGS{PassArguments}
+                    },
+                )
+                : (),
+            );
+        }
+        else {
+            my $query = $m->comp( '/Elements/QueryString', %$QuickCall );
+            RT::Interface::Web::Redirect( $RT::WebURL . "Ticket/Create.html?$query" );
+        }
     }
 }
 </%init>
