@@ -89,6 +89,12 @@ dashboards:
         ]
     );
 
+=begin HTML
+
+<p><img width="500px" src="https://static.bestpractical.com/images/quickcalls/QuickCallsScreenshot01.png" alt="Basic Configuration" /></p>
+
+=end HTML
+
 =head2 CUSTOM CONFIGURATION PER DASHBOARD
 
 If you would like different dashboards to show different Quick Calls you
@@ -116,6 +122,12 @@ can use a different configuration format:
 The above configuration would show different Quick Calls when the
 portlet is loaded on the Dashboard with ID 1. If there is not a custom
 configuration for a Dashboard ID it will use the 'Default' value.
+
+=begin HTML
+
+<p><img width="500px" src="https://static.bestpractical.com/images/quickcalls/QuickCallsScreenshot02.png" alt="Basic Configuration" /></p>
+
+=end HTML
 
 =head2 SUBREF VALUES
 
