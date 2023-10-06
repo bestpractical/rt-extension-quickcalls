@@ -22,6 +22,11 @@ dashboards.
 You can configure the portlet to show the same Quick Calls on every
 dashboard or customize the Quick Calls per dashboard.
 
+The QuickCalls portlet can also be added to the user summary page:
+
+    Set(@UserSummaryPortlets, (qw/ExtraInfo CreateTicket ActiveTickets
+        InactiveTickets UserAssets QuickCalls/));
+
 =head1 INSTALLATION
 
 =over
