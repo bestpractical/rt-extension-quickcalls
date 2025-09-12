@@ -162,6 +162,25 @@ stay on the dashboard you can use the QuickCreate option:
         ]
     );
 
+=cut
+
+if ( RT->Config->can('RegisterPluginConfig') ) {
+    RT->Config->RegisterPluginConfig(
+        Plugin  => 'QuickCalls',
+        Content => [
+            {
+                Name => 'QuickCalls',
+                Help => 'https://metacpan.org/pod/RT::Extension::QuickCalls#CONFIGURATION',
+            },
+        ],
+        Meta    => {
+            QuickCalls => {
+                Type => 'JSON',
+            },
+        }
+    );
+}
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
