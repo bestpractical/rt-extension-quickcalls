@@ -2,7 +2,7 @@ package RT::Extension::QuickCalls;
 use warnings;
 use strict;
 
-our $VERSION = '1.04';
+our $VERSION = '2.00';
 
 =head1 NAME
 
