@@ -45,6 +45,8 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
+<& /Views/Component/QuickCalls, From => $ARGS{From} &>
+% $m->abort; # No footer
 <%init>
 if ( $QuickCall ) {
     my $config = RT->Config->Get('QuickCalls');
@@ -76,8 +78,8 @@ if ( $QuickCall ) {
             for grep { ref $QuickCall->{$_} eq "CODE" } keys %{$QuickCall};
 
         if ( $QuickCall->{QuickCreate} ) {
-            ProcessQuickCreate(
-                Path => $ARGS{QuickCallsPath},
+            my @results;
+            push @results, ProcessQuickCreate(
                 ARGSRef => $QuickCall,
                 $ARGS{PassArguments}
                 ? (
@@ -87,6 +89,12 @@ if ( $QuickCall ) {
                 )
                 : (),
             );
+            $r->headers_out->{'HX-Trigger'} = JSON(
+                {
+                    actionsChanged => \@results
+                },
+                ascii => 1,
+            ) if @results;
         }
         else {
             my $query = $m->comp( '/Elements/QueryString', %$QuickCall );
